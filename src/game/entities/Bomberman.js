@@ -12,8 +12,14 @@ import {
 	Direction,
 	MovementLookup,
 } from "game/constants/entities.js";
-import { FRAME_TIME, HALF_TILE_SIZE, TILE_SIZE } from "game/constants/game.js";
+import {
+	DEBUG,
+	FRAME_TIME,
+	HALF_TILE_SIZE,
+	TILE_SIZE,
+} from "game/constants/game.js";
 import { collisionMap, CollisionTile } from "game/constants/LevelData.js";
+import { drawBox, drawCross } from "game/utils/debug.js";
 import { isZero } from "game/utils/utils.js";
 
 export class Bomberman extends Entity {
@@ -245,5 +251,26 @@ export class Bomberman extends Entity {
 			Math.floor(this.position.y - camera.position.y),
 			[this.direction === Direction.RIGHT ? -1 : 1, 1]
 		);
+
+		if (!DEBUG) return;
+		else {
+			drawBox(
+				context,
+				camera,
+				[
+					this.position.x - HALF_TILE_SIZE,
+					this.position.y - HALF_TILE_SIZE,
+					TILE_SIZE - 1,
+					TILE_SIZE - 1,
+				],
+				"#FFFF00"
+			);
+			drawCross(
+				context,
+				camera,
+				{ x: this.position.x, y: this.position.y },
+				"#FFF"
+			);
+		}
 	}
 }
