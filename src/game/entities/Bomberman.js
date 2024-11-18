@@ -57,10 +57,10 @@ export class Bomberman extends Entity {
 	changeState(newState, time) {
 		this.currentState = this.states[newState];
 		this.animationFrame = 0;
-		this.animationTimer =
-			time.previous + this.animation[this.animationFrame] * FRAME_TIME;
 
 		this.currentState.init(time);
+		this.animationTimer =
+			time.previous + this.animation[this.animationFrame][1] * FRAME_TIME;
 	}
 
 	getCollisionTile(tile) {
@@ -220,7 +220,11 @@ export class Bomberman extends Entity {
 	}
 
 	updateAnimation(time) {
-		if (time.previous < this.animationTimer || isZero(this.velocity)) return;
+		if (
+			time.previous < this.animationTimer ||
+			this.currentState.type === BombermanStateType.IDLE
+		)
+			return;
 		else {
 			this.animationFrame += 1;
 

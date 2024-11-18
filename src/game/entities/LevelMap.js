@@ -1,23 +1,30 @@
 import { drawTile } from "engine/context.js";
 import { Entity } from "engine/Entity.js";
 import { TILE_SIZE } from "game/constants/game.js";
-import { tileMap } from "game/constants/LevelData.js";
+import {
+	collisionMap,
+	STAGE_MAP_MAX_SIZE,
+	tileMap,
+} from "game/constants/LevelData.js";
 
 export class LevelMap extends Entity {
+	tileMap = [...tileMap];
+	collisionMap = [...collisionMap];
+
+	image = document.querySelector("img#stage");
+	stageImage = new OffscreenCanvas(STAGE_MAP_MAX_SIZE, STAGE_MAP_MAX_SIZE);
+
 	constructor() {
 		super({ x: 0, y: 0 });
 
-		this.tileMap = [...tileMap];
-		this.image = document.querySelector("img#stage");
-		this.stageImage = new OffscreenCanvas(1024, 1024);
+		this.stageImageContext = this.stageImage.getContext("2d");
 
 		this.buildStage();
 	}
 
 	updateStageImageAt(columnIndex, rowIndex, tile) {
-		const context = this.stageImage.getContext("2d");
 		drawTile(
-			context,
+			this.stageImageContext,
 			this.image,
 			tile,
 			columnIndex * TILE_SIZE,
